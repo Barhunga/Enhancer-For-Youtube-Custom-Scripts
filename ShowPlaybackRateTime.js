@@ -31,11 +31,19 @@
     const video = document.querySelector("video");
     const duration = document.querySelector(".ytp-time-duration");
     const current = document.querySelector(".ytp-time-current");
+    const live = document.querySelector(".ytp-live-badge");
     
-    if (!video || !duration || !current) return;
+    if (!video || !duration || !current || !live) return;
     
     function updateDisplay(currentTime) {
         if (!isFinite(video.duration)) return;
+
+        // if is a stream
+        if (live.ariaLabel) {
+            //if (live.disabled) // to check if at live -> or .ytp-live-badge-is-livehead
+            live.textContent = `Live (${video.playbackRate}x)`;
+            return;
+        }
     
         const adjustedCurrent =
             (current.textContent.startsWith("-") ? -1 * (video.duration - currentTime) : currentTime) / video.playbackRate;
@@ -55,7 +63,7 @@
     function updatePill(pill) {
         if (video.playbackRate === 1 || pill.textContent.endsWith(")"))
             return;
-        //if (document.querySelector(".ytp-live-badge-is-livehead")) // for checking if livestream // .disabled true if live
+        
         pill.textContent = `${pill.textContent} (${formatTime(parseTime(pill.textContent) / video.playbackRate)})`;
     }
     
