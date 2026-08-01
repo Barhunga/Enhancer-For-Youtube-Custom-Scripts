@@ -61,14 +61,19 @@
     update();
 
     function updatePill(pill) {
-        if (video.playbackRate === 1 || pill.textContent.endsWith(")"))
-            return;
-        
-        pill.textContent = `${pill.textContent} (${formatTime(parseTime(pill.textContent) / video.playbackRate)})`;
+        pill.firstChild.data = video.playbackRate === 1
+            ? `${pill.textContent.split(" ")[0]}`
+            : `${pill.textContent.split(" ")[0]} (${formatTime(parseTime(pill.textContent.split(" ")[0]) / video.playbackRate)})`;
+    }
+
+    function rateChanged() {
+        updatePill(pill);
+        updatePill(pillMini);
+        update();
     }
     
     video.addEventListener('timeupdate', update);
-    video.addEventListener('ratechange', update);
+    video.addEventListener('ratechange', rateChanged);
     video.addEventListener('loadedmetadata', update);
     
     // Update while seeking
