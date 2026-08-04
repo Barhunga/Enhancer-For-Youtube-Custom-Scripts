@@ -39,7 +39,7 @@
         if (!isFinite(video.duration)) return;
 
         // if is a stream
-        if (live.ariaLabel) {
+        if (live.ariaLabel || live.disasbled) {
             //if (live.disabled) // to check if at live -> or .ytp-live-badge-is-livehead
             live.textContent = `Live (${video.playbackRate}x)`;
             return;
@@ -61,9 +61,10 @@
     update();
 
     function updatePill(pill) {
-        pill.firstChild.data = video.playbackRate === 1
-            ? `${pill.textContent.split(" ")[0]}`
-            : `${pill.textContent.split(" ")[0]} (${formatTime(parseTime(pill.textContent.split(" ")[0]) / video.playbackRate)})`;
+        if (pill.firstChild)
+            pill.firstChild.data = video.playbackRate === 1
+                ? `${pill.textContent.split(" ")[0]}`
+                : `${pill.textContent.split(" ")[0]} (${formatTime(parseTime(pill.textContent.split(" ")[0]) / video.playbackRate)})`;
     }
 
     function rateChanged() {
